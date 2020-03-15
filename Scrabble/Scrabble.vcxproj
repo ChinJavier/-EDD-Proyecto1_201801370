@@ -147,7 +147,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ListaDobleEnlCircular.cpp" />
+    <ClCompile Include="Nodo_D_E_C.cpp" />
     <ClCompile Include="Scrabble.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ListaDobleEnlCircular.h" />
+    <ClInclude Include="Nodo_D_E_C.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
