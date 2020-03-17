@@ -31,7 +31,17 @@ void ListaDobleEnlCircular::insertarFinal(string palabra) {
 }
 
 bool ListaDobleEnlCircular::encontrarPalabra(string palabra) { //Falta
-
+	
+	Nodo_D_E_C* aux = new Nodo_D_E_C();
+	aux = this->primero;
+	for (int i = 0; i < this->tamanio; i++)
+	{
+		if (aux->getPalabra().compare(palabra) == 0)
+		{
+			return true;
+		}
+		aux = aux->getSiguiente();
+	}
 	return false;
 }
 
@@ -120,17 +130,22 @@ void ListaDobleEnlCircular::imprimirContenido() {
 void ListaDobleEnlCircular::eliminarTodo() {
 	this->primero = NULL;
 	this->ultimo = NULL;
+	this->primero->setSiguiente(NULL);
+	this->ultimo->setSiguiente(NULL);
 }
 
 void ListaDobleEnlCircular::setTamanio(int tamanio) {
 	this->tamanio = tamanio;
 }
+
 Nodo_D_E_C* ListaDobleEnlCircular::getPrimero() {
 	return this->primero;
 }
+
 Nodo_D_E_C* ListaDobleEnlCircular::getUltimo() {
 	return this->ultimo;
 }
+
 int ListaDobleEnlCircular::getTamanio() {
 	return this->tamanio;
 }

@@ -147,12 +147,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ArbolBinarioBus.cpp" />
     <ClCompile Include="ListaDobleEnlCircular.cpp" />
+    <ClCompile Include="NodoArbol.cpp" />
     <ClCompile Include="Nodo_D_E_C.cpp" />
     <ClCompile Include="Scrabble.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ArbolBinarioBus.h" />
     <ClInclude Include="ListaDobleEnlCircular.h" />
+    <ClInclude Include="NodoArbol.h" />
     <ClInclude Include="Nodo_D_E_C.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
