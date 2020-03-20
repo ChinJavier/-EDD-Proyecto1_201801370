@@ -149,15 +149,23 @@
   <ItemGroup>
     <ClCompile Include="ArbolBinarioBus.cpp" />
     <ClCompile Include="ListaDobleEnlCircular.cpp" />
+    <ClCompile Include="MatrizDisper.cpp" />
     <ClCompile Include="NodoArbol.cpp" />
+    <ClCompile Include="NodoMatriz.cpp" />
     <ClCompile Include="Nodo_D_E_C.cpp" />
     <ClCompile Include="Scrabble.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArbolBinarioBus.h" />
     <ClInclude Include="ListaDobleEnlCircular.h" />
+    <ClInclude Include="MatrizDisper.h" />
     <ClInclude Include="NodoArbol.h" />
+    <ClInclude Include="NodoMatriz.h" />
     <ClInclude Include="Nodo_D_E_C.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Scrabble.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
