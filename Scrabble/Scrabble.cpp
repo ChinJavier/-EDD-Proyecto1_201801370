@@ -2,6 +2,7 @@
 #include "ArbolBinarioBus.h"
 #include "MatrizDisper.h"
 #include "ListaDobleEnl.h"
+#include "ListaOrdenada.h"
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -18,6 +19,7 @@ static ListaDobleEnlCircular listaDC;
 static ArbolBinarioBus arbol;
 static MatrizDisper matriz;
 static ListaDobleEnl dobleEnlazada;
+static ListaOrdenada listaOrdenada;
 json juego;
 json dimensionJs;
 json dobleJs;
@@ -32,8 +34,13 @@ void crear(string);
 
 int main()
 {
-    
-
+    listaOrdenada.insertar("Javier", 0);
+    listaOrdenada.insertar("Javier",5);
+    listaOrdenada.insertar("Javier", 12);
+    listaOrdenada.insertar("Javier", 14);
+    listaOrdenada.insertar("Javier", 2);
+    listaOrdenada.insertar("Javier", 1);
+    listaOrdenada.graph();
     return 0;
 }
 

@@ -150,10 +150,12 @@
     <ClCompile Include="ArbolBinarioBus.cpp" />
     <ClCompile Include="ListaDobleEnl.cpp" />
     <ClCompile Include="ListaDobleEnlCircular.cpp" />
+    <ClCompile Include="ListaOrdenada.cpp" />
     <ClCompile Include="MatrizDisper.cpp" />
     <ClCompile Include="NodoArbol.cpp" />
     <ClCompile Include="NodoDobleEnl.cpp" />
     <ClCompile Include="NodoMatriz.cpp" />
+    <ClCompile Include="NodoOrdenado.cpp" />
     <ClCompile Include="Nodo_D_E_C.cpp" />
     <ClCompile Include="Scrabble.cpp" />
   </ItemGroup>
@@ -161,10 +163,12 @@
     <ClInclude Include="ArbolBinarioBus.h" />
     <ClInclude Include="ListaDobleEnl.h" />
     <ClInclude Include="ListaDobleEnlCircular.h" />
+    <ClInclude Include="ListaOrdenada.h" />
     <ClInclude Include="MatrizDisper.h" />
     <ClInclude Include="NodoArbol.h" />
     <ClInclude Include="NodoDobleEnl.h" />
     <ClInclude Include="NodoMatriz.h" />
+    <ClInclude Include="NodoOrdenado.h" />
     <ClInclude Include="Nodo_D_E_C.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
