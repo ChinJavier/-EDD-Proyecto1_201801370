@@ -18,7 +18,7 @@ public:
 
 	void insertarFinal(string);				//Utilizado para insertar al teclear
 	bool encontrarPalabra(string);			//Utilizado para validar existencia
-	Nodo_D_E_C* Buscar(string);			//Utilizado para buscar un nodo
+	//Nodo_D_E_C* Buscar(string);			//Utilizado para buscar un nodo
 	bool estaVacia();						//Indica si está vacia
 	void eliminarTodo();
 

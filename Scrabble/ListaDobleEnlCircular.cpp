@@ -45,10 +45,6 @@ bool ListaDobleEnlCircular::encontrarPalabra(string palabra) { //Falta
 	return false;
 }
 
-Nodo_D_E_C* ListaDobleEnlCircular::Buscar(string palabra) { //Falta
-
-	return NULL;
-}
 
 bool ListaDobleEnlCircular::estaVacia() {
 	if (this->primero == NULL && this->ultimo == NULL)

@@ -1,6 +1,7 @@
 #include "ListaDobleEnlCircular.h"
 #include "ArbolBinarioBus.h"
 #include "MatrizDisper.h"
+#include "ListaDobleEnl.h"
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -16,6 +17,7 @@ using json = nlohmann::json;
 static ListaDobleEnlCircular listaDC;
 static ArbolBinarioBus arbol;
 static MatrizDisper matriz;
+static ListaDobleEnl dobleEnlazada;
 json juego;
 json dimensionJs;
 json dobleJs;
@@ -31,18 +33,6 @@ void crear(string);
 int main()
 {
     
-    matriz.insertar(1, 1, 'a');
-    matriz.insertar(1,5,'f');
-    matriz.insertar(2,2,'b');
-    matriz.insertar(3, 3, 'c');
-    matriz.insertar(4, 1, 'g');
-    matriz.insertar(4, 4, 'd');
-    matriz.insertar(4, 5, 'e');
-    cout << endl;
-    matriz.graph();
-
-
-    //cout << matriz.getRoot()->getAbajo()->getDerecha()->getAbajo()->getDerecha()->getIzquierda()->getArriba()->getDerecha()->getCaracter();
 
     return 0;
 }
@@ -82,7 +72,17 @@ void crear(string ruta) {
 }
 
 /*
-arbol.insertarAbb("Heidy");
+    matriz.insertar(8, 5, 'O');
+    matriz.insertar(9,5,'S');
+    matriz.insertar(10,5,'O');
+    matriz.insertar(10, 4, 'H');
+    matriz.insertar(10, 4, 'H');
+    matriz.insertar(10, 6, 'L');
+    matriz.insertar(10, 7, 'A');
+    cout << endl;
+    matriz.graph();
+
+    arbol.insertarAbb("Heidy");
     arbol.insertarAbb("Rodrigo");
     arbol.insertarAbb("Carlos");
     arbol.insertarAbb("Antonio");

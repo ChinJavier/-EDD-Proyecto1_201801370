@@ -2,10 +2,9 @@
 #include <string.h>
 #include <string>
 #include <iostream>
-#include <string> 
-using namespace std;
 
 using namespace std;
+
 class Nodo_D_E_C
 {
 private:
