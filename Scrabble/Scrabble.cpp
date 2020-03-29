@@ -10,12 +10,13 @@
 #include <conio.h>
 #include <stdlib.h>
 #include <sstream>
+#include "Menu.h"
 
 #include "/Users/Javier C/Downloads/json.hpp";
 using namespace std;
 using json = nlohmann::json;
 
-static ListaDobleEnlCircular listaDC;
+/*
 static ArbolBinarioBus arbol;
 static MatrizDisper matriz;
 static ListaDobleEnl dobleEnlazada;
@@ -29,54 +30,19 @@ int dimension;
 int cordenadaX = 0;
 int cordenadaY = 0;
 string diccionarioF = " ";
-
-void crear(string);
+void crear(string);*/
+static MatrizDisper matriz;
+Menu menu;
 
 int main()
 {
-    listaOrdenada.insertar("Javier", 0);
-    listaOrdenada.insertar("Javier",5);
-    listaOrdenada.insertar("Javier", 12);
-    listaOrdenada.insertar("Javier", 14);
-    listaOrdenada.insertar("Javier", 2);
-    listaOrdenada.insertar("Javier", 1);
-    listaOrdenada.graph();
+    menu.menuPrincipal();
+    //matriz.insertar(1, 10, 'A');
+    //matriz.insertar(11, 0, 'B');
+    //matriz.graph();
     return 0;
 }
 
-void crear(string ruta) {
-    std::ifstream file(ruta);
-    file >> juego;
-    cout << juego << endl << endl << endl;
-
-    dimensionJs = juego["dimension"]; //Obtengo la dimensión del juego
-    dimension = dimensionJs;
-
-
-    dobleJs = juego["casillas"]["dobles"]; //Obtengo las coordenada x y del doble
-    cout << "Estas son las dobles" << endl;
-
-    for (const auto cordenada : dobleJs) {
-        cordenadaX = cordenada["x"];
-        cordenadaY = cordenada["y"];
-        cout << "[" << cordenadaX << "," << cordenadaY << "]" << endl;
-    }
-
-    tripleJs = juego["casillas"]["triples"]; //Obtengo las coordenada x y del triple
-    cout << "Estas son las triples" << endl;
-    for (const auto cordenada : tripleJs) {
-        cordenadaX = cordenada["x"];
-        cordenadaY = cordenada["y"];
-        cout << "[" << cordenadaX << "," << cordenadaY << "]" << endl;
-    }
-
-    diccionarioJs = juego["diccionario"]; //Obtengo las coordenada x y del triple
-    cout << "Esto es el diccionario" << endl;
-    for (const auto wri : diccionarioJs) {
-        listaDC.insertarFinal(wri["palabra"]);
-    }
-    
-}
 
 /*
     matriz.insertar(8, 5, 'O');

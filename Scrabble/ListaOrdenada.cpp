@@ -2,7 +2,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include "NodoOrdenado.h"
+
 using namespace std;
 
 ListaOrdenada::ListaOrdenada() {
