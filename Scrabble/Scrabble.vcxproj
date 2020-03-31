@@ -153,11 +153,13 @@
     <ClCompile Include="ListaDobleEnl.cpp" />
     <ClCompile Include="ListaDobleEnlCircular.cpp" />
     <ClCompile Include="ListaOrdenada.cpp" />
+    <ClCompile Include="ListaSimple.cpp" />
     <ClCompile Include="MatrizDisper.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="NodoArbol.cpp" />
     <ClCompile Include="NodoCola.cpp" />
     <ClCompile Include="NodoDobleEnl.cpp" />
+    <ClCompile Include="NodoListaSimple.cpp" />
     <ClCompile Include="NodoMatriz.cpp" />
     <ClCompile Include="NodoOrdenado.cpp" />
     <ClCompile Include="Nodo_D_E_C.cpp" />
@@ -171,11 +173,13 @@
     <ClInclude Include="ListaDobleEnl.h" />
     <ClInclude Include="ListaDobleEnlCircular.h" />
     <ClInclude Include="ListaOrdenada.h" />
+    <ClInclude Include="ListaSimple.h" />
     <ClInclude Include="MatrizDisper.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="NodoArbol.h" />
     <ClInclude Include="NodoCola.h" />
     <ClInclude Include="NodoDobleEnl.h" />
+    <ClInclude Include="NodoListaSimple.h" />
     <ClInclude Include="NodoMatriz.h" />
     <ClInclude Include="NodoOrdenado.h" />
     <ClInclude Include="Nodo_D_E_C.h" />

@@ -5,11 +5,11 @@ using namespace std;
 NodoArbol::NodoArbol() {
 	this->der = NULL;
 	this->izq = NULL;
-	this->jugador = "";
+	this->jugador = NULL;
 	this->numero = 0;
 }
 
-NodoArbol::NodoArbol(string jugador, int numero) {
+NodoArbol::NodoArbol(Usuario* jugador, int numero) {
 	this->der = NULL;
 	this->izq = NULL;
 	this->jugador = jugador;
@@ -24,7 +24,7 @@ void NodoArbol::setDer(NodoArbol* der) {
 	this->der = der;
 }
 
-void NodoArbol::setJugador(string jugador) {
+void NodoArbol::setJugador(Usuario* jugador) {
 	this->jugador = jugador;
 }
 
@@ -35,7 +35,7 @@ NodoArbol* NodoArbol::getDer() {
 	return this->der;
 }
 
-string NodoArbol::getJugador() {
+Usuario* NodoArbol::getJugador() {
 	return this->jugador;
 }
 

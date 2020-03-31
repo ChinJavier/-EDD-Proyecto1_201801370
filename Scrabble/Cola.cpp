@@ -25,12 +25,14 @@ void Cola::encolar(Ficha* ficha) {
 }
 
 NodoCola* Cola::descolar() {
+	NodoCola* devolvedor = this->cabeza;
 	if (this->cabeza == NULL && this->ultimo == NULL)
 	{
 		return NULL;
 	}
 	else
 	{
+		
 		NodoCola* aux = this->cabeza;
 		if (aux == this->ultimo && aux == this->cabeza)
 		{
@@ -43,7 +45,7 @@ NodoCola* Cola::descolar() {
 		}
 		this->tamanio--;
 	}
-	
+	return devolvedor;
 }
 
 void Cola::graph() {
@@ -69,7 +71,7 @@ void Cola::graph() {
 	{
 		if (this->tamanio == 1)
 		{
-			acumulador2 += aux->getFicha()->getCaracter() + to_string(indice) + "-> NULL ;";
+			acumulador2 += aux->getFicha()->getCaracter() + to_string(aux->getFicha()->getPuntaje()) + "_" +to_string(indice) + "-> NULL ;";
 		}
 		else
 		{
@@ -79,7 +81,7 @@ void Cola::graph() {
 			}
 			else
 			{
-				acumulador2 += aux->getFicha()->getCaracter() + to_string(indice) + "->" + aux->getSiguiente()->getFicha()->getCaracter() + to_string(indice2) + ";";
+				acumulador2 += aux->getFicha()->getCaracter() + to_string(aux->getFicha()->getPuntaje()) + "_" + to_string(indice) + "->" + aux->getSiguiente()->getFicha()->getCaracter() + to_string(aux->getSiguiente()->getFicha()->getPuntaje()) + "_" + to_string(indice2) + ";";
 				indice++;
 				indice2++;
 			}
@@ -103,10 +105,9 @@ void Cola::graph() {
 }
 
 void Cola::vaciar() {
-	this->cabeza->setSiguiente(NULL);
-	this->ultimo->setSiguiente(NULL);
 	this->cabeza = NULL;
 	this->ultimo = NULL;
+	this->tamanio = 0;
 }
 
 void Cola::setTamanio(int tamanio) {

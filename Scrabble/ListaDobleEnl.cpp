@@ -10,7 +10,7 @@ ListaDobleEnl::ListaDobleEnl() {
 	this->tamanio = 0;
 }
 
-void ListaDobleEnl::insertarFinal(char c) {
+void ListaDobleEnl::insertarFinal(Ficha* c) {
 	NodoDobleEnl* nuevo = new NodoDobleEnl(c);
 	if (ListaDobleEnl::estaVacia())
 	{
@@ -30,7 +30,7 @@ bool ListaDobleEnl::buscarCaracter(char c) {
 	aux = this->primero;
 	while (aux != NULL)
 	{
-		if (aux->getCaracter() == c)
+		if (aux->getFicha()->getCaracter() == c)
 		{
 			return true;
 		}
@@ -53,8 +53,7 @@ bool ListaDobleEnl::estaVacia() {
 void ListaDobleEnl::eliminarTodo() {
 	this->primero = NULL;
 	this->ultimo = NULL;
-	this->primero->setSiguiente(NULL);
-	this->ultimo->setSiguiente(NULL);
+	this->tamanio = 0;
 }
 
 void ListaDobleEnl::codigoGraph() {
@@ -80,7 +79,7 @@ void ListaDobleEnl::codigoGraph() {
 	{
 		if (this->tamanio == 1)
 		{
-			acumulador2 += aux->getCaracter() + to_string(indice) + "-> NULL ;";
+			acumulador2 += aux->getFicha()->getCaracter() + to_string(indice) + "-> NULL ;";
 		}
 		else 
 		{
@@ -90,8 +89,8 @@ void ListaDobleEnl::codigoGraph() {
 			}
 			else 
 			{
-				acumulador2 += aux->getCaracter() + to_string(indice) + "->" + aux->getSiguiente()->getCaracter() + to_string(indice2) + ";";
-				acumulador2 += aux->getSiguiente()->getCaracter() + to_string(indice2) + "->" + aux->getCaracter() + to_string(indice) + ";";
+				acumulador2 += aux->getFicha()->getCaracter() + to_string(indice) + "->" + aux->getSiguiente()->getFicha()->getCaracter() + to_string(indice2) + ";";
+				acumulador2 += aux->getSiguiente()->getFicha()->getCaracter() + to_string(indice2) + "->" + aux->getFicha()->getCaracter() + to_string(indice) + ";";
 				indice++;
 				indice2++;
 			}
@@ -169,7 +168,7 @@ NodoDobleEnl* ListaDobleEnl::buscarNodo(char c) {
 	aux = this->primero;
 	while (aux != NULL)
 	{
-		if (aux->getCaracter() == c)
+		if (aux->getFicha()->getCaracter() == c)
 		{
 			return aux;
 		}

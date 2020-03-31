@@ -1,24 +1,25 @@
 #pragma once
 #include <string>
 #include <iostream>
+#include "Ficha.h"
 using namespace std;
 
 class NodoDobleEnl
 {
 private:
-    char caracter;
+    Ficha* ficha;
     NodoDobleEnl* siguiente;
     NodoDobleEnl* anterior;
 
 public:
     NodoDobleEnl();
-    NodoDobleEnl(char);
+    NodoDobleEnl(Ficha*);
 
-    void setCaracter(char);
+    void setFicha(Ficha*);
     void setSiguiente(NodoDobleEnl*);
     void setAnterior(NodoDobleEnl*);
 
-    char getCaracter();
+    Ficha* getFicha();
     NodoDobleEnl* getSiguiente();
     NodoDobleEnl* getAnterior();
 };

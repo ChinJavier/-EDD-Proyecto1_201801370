@@ -14,7 +14,7 @@ public:
 
 	ListaDobleEnl();
 
-	void insertarFinal(char);
+	void insertarFinal(Ficha*);
 	bool buscarCaracter(char);
 	bool estaVacia();
 	void eliminarTodo();

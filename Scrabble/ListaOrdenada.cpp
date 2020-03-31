@@ -98,7 +98,7 @@ void ListaOrdenada::graph() {
 
 void ListaOrdenada::vaciar() {
 	this->primero = NULL;
-	this->primero->setSiguiente(NULL);
+	this->tamanio = 0;
 }
 NodoOrdenado* ListaOrdenada::getPrimero() {
 	return this->primero;

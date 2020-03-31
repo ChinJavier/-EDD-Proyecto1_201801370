@@ -126,8 +126,7 @@ void ListaDobleEnlCircular::imprimirContenido() {
 void ListaDobleEnlCircular::eliminarTodo() {
 	this->primero = NULL;
 	this->ultimo = NULL;
-	this->primero->setSiguiente(NULL);
-	this->ultimo->setSiguiente(NULL);
+	this->tamanio = 0;
 }
 
 void ListaDobleEnlCircular::setTamanio(int tamanio) {
@@ -145,6 +144,7 @@ Nodo_D_E_C* ListaDobleEnlCircular::getUltimo() {
 int ListaDobleEnlCircular::getTamanio() {
 	return this->tamanio;
 }
+
 
 
 

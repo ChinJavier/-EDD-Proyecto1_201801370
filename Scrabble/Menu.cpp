@@ -5,14 +5,14 @@
 #include <fstream>
 #include "/Users/Javier C/Downloads/json.hpp";
 #include "ListaDobleEnlCircular.h"
-#include "NodoMatriz.h"
+#include "MatrizDisper.h"
 #include "Ficha.h"
 #include "Cola.h"
+#include "ArbolBinarioBus.h"
 #include <vector>
 #include <time.h>
 //---------------------------------------------
 
-using namespace std;
 using namespace std;
 using json = nlohmann::json;
 
@@ -52,12 +52,18 @@ Ficha* desorden[95];
 
 static ListaDobleEnlCircular listaDC;
 static Cola colaFichas;
+static ArbolBinarioBus arbolJugadores;
+static MatrizDisper matrizDisp;
 
 //---------------------------------------------
 
 int permitidoIniciarJuego = 0;
 int opcionMenu = 0;
 int opcionReportes = 0;
+
+//---------------------------------------------
+NodoArbol* usuario1;
+NodoArbol* usuario2;
 
 //---------------------------------------------
 
@@ -84,16 +90,57 @@ void Menu::menuPrincipal() {
 	cout << "Ingrese la opcion a escoger: ";
 	cin >> opcionMenu;
 
-	if (opcionMenu == 1) //Lee archivo
+	if (opcionMenu == 1) //Lee archivo YA ESTÁ
 	{
+		listaDC.eliminarTodo();
 		Menu::leerEntrada();
 
 	}
+
 	else if (opcionMenu == 2) //Inicia el juego
 	{
 		if (permitidoIniciarJuego == 1) //quiere decir que ya leyó el archivo
 		{
+			string p1 = "";
+			string p2 = "";
+			cout << endl;
+			cout << "Estos son los jugadores disponibles: " << endl;
+			arbolJugadores.preOrderConsola();
+			cout << endl;
 
+
+
+			do
+			{
+				cout << "Ingrese el nombre del jugador 1: " << endl;
+				cin >> p1;
+				usuario1 = arbolJugadores.buscarAbb(p1);
+			} while (usuario1 == NULL);
+
+			do
+			{
+				cout << "Ingrese el nombre del jugador 2: " << endl;
+				cin >> p1;
+				usuario2 = arbolJugadores.buscarAbb(p1);
+			} while (usuario2 == NULL);
+
+			colaFichas.graph();
+			//Lleno sus barajas 
+			for (int i = 0; i < 7; i++)
+			{
+				usuario1->getJugador()->getBaraja().insertarFinal(colaFichas.descolar()->getFicha());
+			}
+			for (int i = 0; i < 7; i++)
+			{
+				usuario2->getJugador()->getBaraja().insertarFinal(colaFichas.descolar()->getFicha());
+			}
+			
+			
+			usuario1->getJugador()->getBaraja().codigoGraph();
+			system("pause");
+			usuario2->getJugador()->getBaraja().codigoGraph();
+			int turno = rand() % 2 + 1;
+			Menu::menuJuego(turno);
 		}
 		else {
 			system("cls");
@@ -101,29 +148,39 @@ void Menu::menuPrincipal() {
 			Menu::menuPrincipal();
 		}
 	}
+
 	else if (opcionMenu == 3) //Menú reportes
 	{
-		Menu::menuReportes(0);
+		Menu::menuReportes(0,0);
 	}
-	else if (opcionMenu == 4) //Crea jugadores
+
+	else if (opcionMenu == 4) //Crea jugadores YA ESTA
 	{
-		system("pause");
-		Menu::llenarVector();
-		Menu::mezclarVector();
-		colaFichas.graph();
+		string nombre = "";
+		system("cls");
+		cout << "              *************************************   CREAR USUARIOS   ************************************" << endl << endl;
+		cout << "Ingrese el nombre del usuario: " << endl;
+		cin >> nombre;
+		arbolJugadores.insertarAbb(new Usuario(nombre));
+		system("cls");
+		cout << "Acción realizada con exito" << endl;
+		Menu::menuPrincipal();
 	}
-	else if (opcionMenu == 5) //Sale de la aplicación
+
+	else if (opcionMenu == 5) //Sale de la aplicación YA ESTA
 	{
 		cout << "HASTA LA PROXIMA" << endl;
 		system("pause");
 	}
+
 	else  //Mete algo incorrecto
 	{
 		system("cls");
-		cout << "Ingrese una opción correcta" << endl;
+		cout << "Ingrese una opcion correcta" << endl;
 		Menu::menuPrincipal();
 	}
 }
+
 
 void Menu::leerEntrada() {
 	try
@@ -146,7 +203,7 @@ void Menu::leerEntrada() {
 			cordenadaX = cordenada["x"];
 			cordenadaY = cordenada["y"];
 			cout << "[" << cordenadaX << "," << cordenadaY << "]" << endl;
-			NodoMatriz* aux = new NodoMatriz(cordenadaX, cordenadaY, 'd');
+			matrizDisp.insertar(cordenadaX, cordenadaY, 'd');
 			Objeto d(cordenadaX,cordenadaY,'d');
 			dobles.push_back(d);
 		}
@@ -157,6 +214,7 @@ void Menu::leerEntrada() {
 			cordenadaX = cordenada["x"];
 			cordenadaY = cordenada["y"];
 			cout << "[" << cordenadaX << "," << cordenadaY << "]" << endl;
+			matrizDisp.insertar(cordenadaX, cordenadaY, 't');
 			Objeto t(cordenadaX, cordenadaY, 't');
 			triples.push_back(t);
 
@@ -184,7 +242,7 @@ void Menu::leerEntrada() {
 
 }
 
-void Menu::menuReportes(int deDondeVengo) { //le mando 0
+void Menu::menuReportes(int deDondeVengo, int quienSoy) { //0 si vengo del principal  1 si vengo del juego
 	system("cls");
 	cout << "              *************************************    REPORTES     ************************************" << endl << endl;
 	cout << "1) Lista doblemente circular DICCIONARIO "<< endl;
@@ -198,40 +256,52 @@ void Menu::menuReportes(int deDondeVengo) { //le mando 0
 	cout << "9) Matriz dispersa TABLERO" << endl;
 	cout << "10) Lista doblemente enlazada FICHAS JUGADOR 1" << endl;
 	cout << "11) Lista doblemente enlazada FICHAS JUGADOR 2" << endl;
+	cout << "12) REGRESAR" << endl;
 	cout << "Ingrese la opcion a escoger: ";
 	cin >> opcionReportes;
-	if (opcionReportes == 1)
+	if (opcionReportes == 1)			//Reporte doble circular YA ESTA
 	{
 		if (!listaDC.estaVacia()) {
 			listaDC.codigoGraph();
 		}
 		else {
-			cout << "No ha leído ningún archivo";
-			if (deDondeVengo == 0)
-			{
-				Menu::menuPrincipal();
-			}
+			cout << "No ha leido ningun archivo" << endl;
+			system("pause");
+			system("cls");
 		}
+		Menu::menuReportes(deDondeVengo,quienSoy);
 	}
-	else if (opcionReportes == 2)
-	{
 
+	else if (opcionReportes == 2)		//Reporte cola YA ESTA
+	{
+		colaFichas.graph();
+		Menu::menuReportes(deDondeVengo,quienSoy);
 	}
-	else if (opcionReportes == 3)
+	else if (opcionReportes == 3)  //Reporte árbol YA ESTA
 	{
-
+		arbolJugadores.graph();
+		Menu::menuReportes(deDondeVengo,quienSoy);
 	}
-	else if (opcionReportes == 4)
+	else if (opcionReportes == 4)  //Reporte preorder del árbol YA ESTA
 	{
-
+		arbolJugadores.preOrder();
+		arbolJugadores.graphPre();
+		arbolJugadores.vaciarListaPre();
+		Menu::menuReportes(deDondeVengo,quienSoy);
 	}
-	else if (opcionReportes == 5)
+	else if (opcionReportes == 5) //Reporte inorder del árbol YA ESTA
 	{
-
+		arbolJugadores.inOrder();
+		arbolJugadores.graphIn();
+		arbolJugadores.vaciarListaIn();
+		Menu::menuReportes(deDondeVengo,quienSoy);
 	}
-	else if (opcionReportes == 6)
+	else if (opcionReportes == 6)  ///Reporte postorder del árbol YA ESTA
 	{
-
+		arbolJugadores.postOrder();
+		arbolJugadores.graphPost();
+		arbolJugadores.vaciarListaPost();
+		Menu::menuReportes(deDondeVengo,quienSoy);
 	}
 	else if (opcionReportes == 7)
 	{
@@ -243,7 +313,8 @@ void Menu::menuReportes(int deDondeVengo) { //le mando 0
 	}
 	else if (opcionReportes == 9)
 	{
-
+		matrizDisp.graph2();
+		Menu::menuReportes(deDondeVengo,quienSoy);
 	}
 	else if (opcionReportes == 10)
 	{
@@ -253,7 +324,22 @@ void Menu::menuReportes(int deDondeVengo) { //le mando 0
 	{
 
 	}
+	else if (opcionReportes == 12)
+	{
+		if (deDondeVengo == 0)
+		{
+			system("cls");
+			Menu::menuPrincipal();
+		}
+		else {
+			system("cls");
+			Menu::menuJuego(quienSoy);
+		}
+	}
 	else {
+		cout << "Ingrese una opcion correcta " << endl;
+		system("pause");
+		Menu::menuReportes(deDondeVengo,quienSoy);
 	
 	}	
 	
@@ -385,5 +471,70 @@ void Menu::llenarCola() {
 	}
 }
 
+void Menu::menuJuego(int turno) {
+	int opcionJuego = 0;
+	system("cls");
+	cout << "          *************************************   SCRABBLE   ************************************" << endl << endl;
+	if (turno == 1) 
+	{
+		cout << "TURNO JUGADOR 1" << endl;
+	}
+	else
+	{
+		cout << "TURNO JUGADOR 2" << endl;
+	}	
 
+	cout << "1) Salir " << endl;
+	cout << "2) Reportes " << endl;
+	cout << "3) Insertar " << endl;
+	cout << "4) Intercambiar " << endl;
+	cout << "Ingrese la opción a escoger: ";
+	cin >> opcionJuego;
+	
+	if (opcionJuego  == 1)
+	{
+		Menu::menuPrincipal();
+	}
+	else if (opcionJuego == 2)
+	{
+		Menu::menuReportes(1,turno);
+	}
+	else if (opcionJuego == 3)
+	{
+
+		if (turno == 1)
+		{
+			turno == 2;
+		}
+		else
+		{
+			turno == 1;
+		}
+		Menu::menuJuego(turno);
+	}
+	else if (opcionJuego == 4)
+	{
+		if (turno == 1)
+		{
+			turno == 2;
+
+		}
+		else
+		{
+			turno == 1;
+		}
+		Menu::menuJuego(turno);
+	}
+	else
+	{
+		cout << "Opción incorrecta" << endl;
+		Menu::menuJuego(turno);
+	}
+
+
+}
+
+void Menu::elmeromero(int turn) {
+
+}
 	

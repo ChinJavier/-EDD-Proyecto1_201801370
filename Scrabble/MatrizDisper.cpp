@@ -410,3 +410,195 @@ void MatrizDisper::graph() {
 
 	cadena = "";
 } 
+
+
+void MatrizDisper::graph2() {
+	ofstream escribe;
+	escribe.open("C:\\EDD\\matrizDos.txt", ios::out);
+	if (escribe.fail())
+	{
+		cout << "*No se pudo abrir el archivo*" << endl;
+		system("pause");
+		exit(1);
+	}
+
+	string diagr = "digraph G ";
+	string acumulador = diagr + "{ node[shape = box]" + '\n';
+	string acumulador2 = " ";
+	bool bandera1 = true;
+	bool bandera2 = true;
+	NodoMatriz* aux = this->root;
+	NodoMatriz* aux2 = this->root;
+	NodoMatriz* aux3 = NULL;
+	NodoMatriz* aux4 = this->root;
+	NodoMatriz* aux5 = this->root;
+	NodoMatriz* aux6 = this->root;
+	NodoMatriz* aux7 = NULL;
+	NodoMatriz* aux8 = this->root;
+	NodoMatriz* aux9 = NULL;
+	/////////////////////////////////////////////////////////////////// Creo todo los nodos
+
+	while (aux != NULL) // Creo las cabeceras de columnas
+	{
+
+		if (aux->getX() == -1)
+		{
+
+			cadena += "Raiz[ label = \" root \" , width = 1, style = filled, fillcolor = firebrick1, group = " + to_string(aux->getX()) + " ]; ";
+			ranker += "Raiz ";
+		}
+		else
+		{
+			cadena += "C" + to_string(aux->getX()) + "[ label = \" " + aux->getCaracter() + "_" + to_string(aux->getX()) + "\" , width = 1, style = filled, fillcolor = firebrick1, group = " + to_string(aux->getX()) + " ]; ";
+			ranker += "C" + to_string(aux->getX()) + " ";
+		}
+		aux = aux->getDerecha();
+	}
+
+
+	while (aux2 != NULL) //Creo las cabeceras de Filas y todos los nodos 
+	{
+		if (aux2->getY() == -1)
+		{
+
+			//cadena += "Raiz[ label = \" root \" , width = 1.5, style = filled, fillcolor = firebrick1, group = " + to_string(aux->getX()) + " ]; ";
+		}
+		else
+		{
+			cadena += "F" + to_string(aux2->getY()) + "[ label = \" " + aux2->getCaracter() + "_" + to_string(aux2->getY()) + "\" , width = 1, style = filled, fillcolor = firebrick1, group = " + to_string(aux2->getX()) + " ]; ";
+			if (aux2->getDerecha() != NULL)
+			{
+				aux3 = aux2->getDerecha();
+				while (aux3 != NULL)
+				{
+					cadena += "M" + to_string(aux3->getX()) + "_"+ to_string(aux3->getY()) + "[ label = \" " + aux3->getCaracter() + "\" , width = 1, style = filled, fillcolor = lightskyblue, group = " + to_string(aux3->getX()) + " ]; ";
+					aux3 = aux3->getDerecha();
+				}
+			}
+		}
+		aux2 = aux2->getAbajo();
+	}
+
+	while (aux4 != NULL)
+	{
+		if (aux4->getX() == -1 && aux4->getY() == -1) //Enlazo Raiz con los nodos de columnas
+		{
+			cadena += "Raiz -> C" + to_string(aux4->getDerecha()->getX()) + "[dir=both];";
+		}
+		else
+		{
+			if (aux4->getDerecha() != NULL)
+			{
+				cadena += "C" + to_string(aux4->getX()) + "->" + "C" + to_string(aux4->getDerecha()->getX()) + "[dir=both];";
+			}
+
+		}
+		aux4 = aux4->getDerecha();
+	}
+
+
+	while (aux5 != NULL)
+	{
+		if (aux5->getX() == -1 && aux5->getY() == -1) //Enlazo Raiz con los nodos de filas
+		{
+			cadena += "Raiz -> F" + to_string(aux5->getAbajo()->getY()) + "[dir=both];";
+		}
+		else
+		{
+			if (aux5->getAbajo() != NULL)
+			{
+				cadena += "F" + to_string(aux5->getY()) + "->" + "F" + to_string(aux5->getAbajo()->getY()) + "[dir=both];";
+			}
+
+		}
+		aux5 = aux5->getAbajo();
+	}
+
+	cadena += "{rank = same; " + ranker + "};";
+	ranker = "";
+
+	while (aux6 != NULL) //Creo las cabeceras de Filas y todos los nodos 
+	{
+		if (aux6->getY() == -1)
+		{
+
+			//cadena += "Raiz[ label = \" root \" , width = 1.5, style = filled, fillcolor = firebrick1, group = " + to_string(aux->getX()) + " ]; ";
+		}
+		else
+		{
+			if (aux6->getDerecha() != NULL)
+			{
+				aux7 = aux6;
+
+				while (aux7 != NULL)
+				{
+					if (aux7->getX() == -1)
+					{
+						cadena += "F" + to_string(aux7->getY()) + "->" + "M" + to_string(aux7->getDerecha()->getX()) + "_" + to_string(aux7->getDerecha()->getY()) + "[dir=both];";
+						ranker += "F" + to_string(aux7->getY()) + " ";
+					}
+					else if (aux7->getDerecha() != NULL)
+					{
+						cadena += "M" + to_string(aux7->getX()) + "_" +to_string(aux7->getY()) + "->" + "M" + to_string(aux7->getDerecha()->getX()) + "_" + to_string(aux7->getDerecha()->getY()) + "[dir=both];";
+						ranker += "M" + to_string(aux7->getX()) + "_" + to_string(aux7->getY()) + " ";
+					}
+					else
+					{
+						ranker += "M" + to_string(aux7->getX()) + "_" + to_string(aux7->getY()) + " ";
+					}
+					aux7 = aux7->getDerecha();
+				}
+				cadena += "{rank = same; " + ranker + "};";
+				ranker = "";
+
+			}
+
+		}
+		aux6 = aux6->getAbajo();
+	}
+
+	while (aux8 != NULL)
+	{
+		if (aux8->getX() == -1)
+		{
+
+			//cadena += "Raiz[ label = \" root \" , width = 1.5, style = filled, fillcolor = firebrick1, group = " + to_string(aux->getX()) + " ]; ";
+		}
+		else
+		{
+
+			if (aux8->getAbajo() != NULL)
+			{
+				aux9 = aux8;
+
+				while (aux9 != NULL)
+				{
+					if (aux9->getY() == -1)
+					{
+						cadena += "C" + to_string(aux9->getX()) + "->" + "M" + to_string(aux9->getAbajo()->getX()) + "_" + to_string(aux9->getAbajo()->getY()) + "[dir=both];";
+					}
+					else if (aux9->getAbajo() != NULL)
+					{
+						cadena += "M" + to_string(aux9->getX()) + "_" + to_string(aux9->getY()) + "->" + "M" + to_string(aux9->getAbajo()->getX()) + "_" + to_string(aux9->getAbajo()->getY()) + "[dir=both];";
+					}
+					aux9 = aux9->getAbajo();
+				}
+
+			}
+
+		}
+		aux8 = aux8->getDerecha();
+	}
+	////////////////////////////////////////////////////////////////
+	acumulador += cadena + "}";
+
+	escribe << acumulador;
+	escribe.close();
+	char g[] = "dot -Tjpg C:\\EDD\\matrizDos.txt -o C:\\EDD\\matrizDos.jpg";
+	system(g);
+	char e[] = "C:\\EDD\\matrizDos.jpg";
+	system(e);
+	system("pause");
+
+	cadena = "";
+}

@@ -1,8 +1,13 @@
 #include "ArbolBinarioBus.h"
+#include "ListaSimple.h"
 #include <string>
 #include <iostream>
 #include <fstream>
 using namespace std;
+
+static ListaSimple preL;
+static ListaSimple inL;
+static ListaSimple postL;
 
 ArbolBinarioBus::ArbolBinarioBus() {
 	this->raiz = NULL;
@@ -10,30 +15,30 @@ ArbolBinarioBus::ArbolBinarioBus() {
     this->numeroArbol = 0;
 }
 
-void ArbolBinarioBus::insertarAbb(string nombre) {
-    this->raiz = this->insertarAbb_rec(this->raiz, nombre);
+void ArbolBinarioBus::insertarAbb(Usuario* usuario) {
+    this->raiz = this->insertarAbb_rec(this->raiz, usuario);
 }
 
-NodoArbol* ArbolBinarioBus::insertarAbb_rec(NodoArbol* root, string nombre) {
+NodoArbol* ArbolBinarioBus::insertarAbb_rec(NodoArbol* root, Usuario* nombre) {
     //Si el árbol está vacio
     if (root == NULL)
     {
         root = new NodoArbol(nombre,this->numeroArbol);
         this->numeroArbol++;
     }
-    else if ((this->compararNombres(this->convertirMinuscula(nombre), this->convertirMinuscula(root->getJugador()))) == 2) // La raiz es mayor, me voy a la izq
+    else if ((this->compararNombres(this->convertirMinuscula(nombre->getNombre()), this->convertirMinuscula(root->getJugador()->getNombre()))) == 2) // La raiz es mayor, me voy a la izq
     {
         //cout << "!!A la izquierda " << nombre << endl;
         root->setIzq(insertarAbb_rec(root->getIzq(), nombre));
     }
-    else if ((this->compararNombres(this->convertirMinuscula(nombre), this->convertirMinuscula(root->getJugador()))) == 1) // La raiz es menor, me voy a la der
+    else if ((this->compararNombres(this->convertirMinuscula(nombre->getNombre()), this->convertirMinuscula(root->getJugador()->getNombre()))) == 1) // La raiz es menor, me voy a la der
     {
         //cout << "!!A la derecha " << nombre << endl;
         root->setDer(insertarAbb_rec(root->getDer(), nombre));
     }
     else
     {
-        //cout << "*****Este nodo ya está *****";
+        cout << "*****Este jugador ya existe *****";
     }
     return root;
 }
@@ -67,7 +72,7 @@ void ArbolBinarioBus::preOrder() {
 void ArbolBinarioBus::preOrder_rec(NodoArbol* raiz) {
     if (raiz != NULL)
     {
-        cout << "** " << raiz->getJugador();
+        ArbolBinarioBus::llenarListaPre(raiz->getJugador()->getNombre());
         ArbolBinarioBus::preOrder_rec(raiz->getIzq());
         ArbolBinarioBus::preOrder_rec(raiz->getDer());
     }
@@ -81,7 +86,7 @@ void ArbolBinarioBus::inOrder_rec(NodoArbol* raiz) {
     if (raiz != NULL)
     {
         ArbolBinarioBus::inOrder_rec(raiz->getIzq());
-        cout << "** " << raiz->getJugador();
+        ArbolBinarioBus::llenarListaIn(raiz->getJugador()->getNombre());
         ArbolBinarioBus::inOrder_rec(raiz->getDer());
     }
 }
@@ -95,7 +100,20 @@ void ArbolBinarioBus::postOrder_rec(NodoArbol* raiz) {
     {
         ArbolBinarioBus::postOrder_rec(raiz->getIzq());
         ArbolBinarioBus::postOrder_rec(raiz->getDer());
-        cout << "** " << raiz->getJugador();
+        ArbolBinarioBus::llenarListaPost(raiz->getJugador()->getNombre());
+    }
+}
+
+void ArbolBinarioBus::preOrderConsola() {
+    ArbolBinarioBus::preOrderConsola_rec(this->raiz);
+}
+
+void ArbolBinarioBus::preOrderConsola_rec(NodoArbol* raiz) {
+    if (raiz != NULL)
+    {
+        cout << "->" << raiz->getJugador()->getNombre() << endl;
+        ArbolBinarioBus::preOrderConsola_rec(raiz->getIzq());
+        ArbolBinarioBus::preOrderConsola_rec(raiz->getDer());
     }
 }
 
@@ -134,7 +152,7 @@ void ArbolBinarioBus::graph() {
 void ArbolBinarioBus::graph_rec(NodoArbol* raiz) {
     if (raiz != NULL) {
 
-        this->cadena += "nodo" + to_string(raiz->getNumero()) + "[label=\"" + raiz->getJugador() + "\"];\n";
+        this->cadena += "nodo" + to_string(raiz->getNumero()) + "[label=\"" + raiz->getJugador()->getNombre() + "\"];\n";
 
         graph_rec(raiz->getIzq());
         graph_rec(raiz->getDer());
@@ -149,28 +167,40 @@ void ArbolBinarioBus::graph_rec(NodoArbol* raiz) {
     }
 }
 
-void ArbolBinarioBus::llenarListaPre() {
-
+void ArbolBinarioBus::llenarListaPre(string nombre) {
+    preL.insertar(nombre);
 }
 
-void ArbolBinarioBus::llenarListaIn() {
-
+void ArbolBinarioBus::llenarListaIn(string nombre) {
+    inL.insertar(nombre);
 }
 
-void ArbolBinarioBus::llenarListaPost() {
+void ArbolBinarioBus::llenarListaPost(string nombre) {
+    postL.insertar(nombre);
+}
 
+void ArbolBinarioBus::graphPre() {
+    preL.graph();
+}
+
+void ArbolBinarioBus::graphIn() {
+    inL.graph();
+}
+
+void ArbolBinarioBus::graphPost() {
+    postL.graph();
 }
 
 void ArbolBinarioBus::vaciarListaPre() {
-
+    preL.vaciar();
 }
 
 void ArbolBinarioBus::vaciarListaIn() {
-
+    inL.vaciar();
 }
 
 void ArbolBinarioBus::vaciarListaPost() {
-
+    postL.vaciar();
 }
 
 string ArbolBinarioBus::convertirMinuscula(string palabra) {
@@ -203,6 +233,16 @@ int ArbolBinarioBus::compararNombres(string n1, string n2) { //0 si son iguales,
         {
             if ((int)n1[i] == (int)n2[i])
             {
+               if (i == tamanioMin-1)
+                {
+                    if (tamanio1>tamanio2)
+                    {
+                        return 1;
+                    }
+                    else {
+                        return 2;
+                    }
+                }
                 //Son iguales
             }
             else if ((int)n1[i] > (int)n2[i])
@@ -214,8 +254,31 @@ int ArbolBinarioBus::compararNombres(string n1, string n2) { //0 si son iguales,
             }
         }
     }
-
     return 0;
 }
 
+NodoArbol* ArbolBinarioBus::buscarAbb(string usuario) {
+    return this->buscarAbb_rec(this->raiz, usuario);
+}
 
+NodoArbol* ArbolBinarioBus::buscarAbb_rec(NodoArbol* root, string nombre) {
+    if (root == NULL)
+    {
+        cout << "**Usuario ingresado invalido" << endl;
+        return NULL;
+    }
+    else if ((this->compararNombres(this->convertirMinuscula(nombre), this->convertirMinuscula(root->getJugador()->getNombre()))) == 2) // La raiz es mayor, me voy a la izq
+    {
+        return buscarAbb_rec(root->getIzq(), nombre);
+    }
+    else if ((this->compararNombres(this->convertirMinuscula(nombre), this->convertirMinuscula(root->getJugador()->getNombre()))) == 1) // La raiz es menor, me voy a la der
+    {
+        return buscarAbb_rec(root->getDer(), nombre);
+    }
+    else
+    {
+        cout << "**Usuario aceptado" << endl;
+        return root;
+    }
+
+}

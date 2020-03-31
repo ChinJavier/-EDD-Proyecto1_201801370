@@ -6,17 +6,17 @@ using namespace std;
 NodoDobleEnl::NodoDobleEnl() {
 	this->anterior = NULL;
 	this->siguiente = NULL;
-	this->caracter = ' ';
+	this->ficha = NULL;
 }
 
-NodoDobleEnl::NodoDobleEnl(char c) {
+NodoDobleEnl::NodoDobleEnl(Ficha* ficha) {
 	this->anterior = NULL;
 	this->siguiente = NULL;
-	this->caracter = c;
+	this->ficha = ficha;
 }
 
-void NodoDobleEnl::setCaracter(char c) {
-	this->caracter = c;
+void NodoDobleEnl::setFicha(Ficha* ficha) {
+	this->ficha = ficha;
 }
 
 void NodoDobleEnl::setSiguiente(NodoDobleEnl* sig) {
@@ -27,8 +27,8 @@ void NodoDobleEnl::setAnterior(NodoDobleEnl* ant) {
 	this->anterior = ant;
 }
 
-char NodoDobleEnl::getCaracter() {
-	return this->caracter;
+Ficha* NodoDobleEnl::getFicha() {
+	return this->ficha;
 }
 
 NodoDobleEnl* NodoDobleEnl::getSiguiente() {

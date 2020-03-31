@@ -32,6 +32,7 @@ public:
 	void insertar(int, int, char);
 
 	void graph();
+	void graph2();
 
 
 
