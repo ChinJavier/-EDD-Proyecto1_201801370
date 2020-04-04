@@ -18,6 +18,7 @@ private:
 	void preOrderConsola_rec(NodoArbol*);
 	void graph_rec(NodoArbol*);
 	NodoArbol* buscarAbb_rec(NodoArbol*, string);
+	void score_rec(NodoArbol*);
 
 public:
 
@@ -34,6 +35,7 @@ public:
 	void preOrder();
 	void inOrder();
 	void postOrder();
+	void score();
 
 
 	void llenarListaPre(string);
@@ -47,6 +49,8 @@ public:
 	void vaciarListaPre();
 	void vaciarListaIn();
 	void vaciarListaPost();
+
+	void scoreGraph();
 
 	void mostrarArbol(int);
 

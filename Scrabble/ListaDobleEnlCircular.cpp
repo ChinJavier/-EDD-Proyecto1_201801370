@@ -36,7 +36,7 @@ bool ListaDobleEnlCircular::encontrarPalabra(string palabra) { //Falta
 	aux = this->primero;
 	for (int i = 0; i < this->tamanio; i++)
 	{
-		if (aux->getPalabra().compare(palabra) == 0)
+		if (ListaDobleEnlCircular::convertirMinuscula(aux->getPalabra()).compare(ListaDobleEnlCircular::convertirMinuscula(palabra)) == 0)
 		{
 			return true;
 		}
@@ -147,7 +147,13 @@ int ListaDobleEnlCircular::getTamanio() {
 
 
 
-
+string ListaDobleEnlCircular::convertirMinuscula(string palabra){
+	int tamanio = palabra.length();
+	for (int i = 0; i < tamanio; i++) {
+		palabra[i] = tolower(palabra[i]);
+	}
+	return palabra;
+}
 
 
 

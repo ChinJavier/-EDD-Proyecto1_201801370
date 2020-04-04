@@ -3,11 +3,13 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include "ListaOrdenada.h"
 using namespace std;
 
 static ListaSimple preL;
 static ListaSimple inL;
 static ListaSimple postL;
+static ListaOrdenada scoreMero;
 
 ArbolBinarioBus::ArbolBinarioBus() {
 	this->raiz = NULL;
@@ -281,4 +283,29 @@ NodoArbol* ArbolBinarioBus::buscarAbb_rec(NodoArbol* root, string nombre) {
         return root;
     }
 
+}
+
+void ArbolBinarioBus::score() {
+    ArbolBinarioBus::score_rec(this->raiz);
+}
+
+void ArbolBinarioBus::score_rec(NodoArbol* raiz) {
+    if (raiz != NULL)
+    {
+        if (raiz->getJugador()->getScoreboard().getPrimero() != NULL)
+        {
+            scoreMero.insertar(raiz->getJugador()->getNombre(), raiz->getJugador()->getScoreboard().getPrimero()->getPuntaje());
+        }
+        else
+        {
+
+        }
+        ArbolBinarioBus::score_rec(raiz->getIzq());
+        ArbolBinarioBus::score_rec(raiz->getDer());
+    }
+}
+
+void ArbolBinarioBus::scoreGraph() {
+    scoreMero.graph();
+    system("pause");
 }

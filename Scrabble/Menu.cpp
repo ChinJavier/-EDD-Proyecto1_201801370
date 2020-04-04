@@ -40,6 +40,7 @@ json diccionarioJs;
 int dimension;
 int cordenadaX = 0;
 int cordenadaY = 0;
+int dimensionLimite = 0;
 
 //---------------------------------------------
 
@@ -54,7 +55,10 @@ static ListaDobleEnlCircular listaDC;
 static Cola colaFichas;
 static ArbolBinarioBus arbolJugadores;
 static MatrizDisper matrizDisp;
-
+static MatrizDisper matrizFake;
+static MatrizDisper vg;
+static Cola colaFake;
+static ListaOrdenada listaScore;
 //---------------------------------------------
 
 int permitidoIniciarJuego = 0;
@@ -92,15 +96,35 @@ void Menu::menuPrincipal() {
 
 	if (opcionMenu == 1) //Lee archivo YA ESTÁ
 	{
-		listaDC.eliminarTodo();
 		Menu::leerEntrada();
+		listaDC.eliminarTodo();
 
 	}
 
 	else if (opcionMenu == 2) //Inicia el juego
 	{
+
 		if (permitidoIniciarJuego == 1) //quiere decir que ya leyó el archivo
 		{
+
+			/*COPIO LA MATRIZ ORIGINAL EN LA FAKE*/
+			NodoMatriz* aux = matrizDisp.getRoot()->getAbajo();
+			NodoMatriz* aux2 = matrizDisp.getRoot();
+			matrizFake.getRoot()->setAbajo(NULL); //Le pierdo todos los enlaces
+			matrizFake.getRoot()->setDerecha(NULL);//Le pierde todos los enlaces
+
+			while (aux != NULL)
+			{
+				aux2 = aux->getDerecha();
+				while (aux2 != NULL)
+				{
+					matrizFake.insertar(aux2->getX(), aux2->getY(), aux2->getFicha()); //Cabeceras
+					aux2 = aux2->getDerecha();
+				}
+				aux = aux->getAbajo();
+			}
+
+
 			string p1 = "";
 			string p2 = "";
 			cout << endl;
@@ -203,7 +227,7 @@ void Menu::leerEntrada() {
 			cordenadaX = cordenada["x"];
 			cordenadaY = cordenada["y"];
 			cout << "[" << cordenadaX << "," << cordenadaY << "]" << endl;
-			matrizDisp.insertar(cordenadaX, cordenadaY, 'd');
+			matrizDisp.insertar(cordenadaX, cordenadaY, new Ficha('d',0));
 			Objeto d(cordenadaX,cordenadaY,'d');
 			dobles.push_back(d);
 		}
@@ -214,7 +238,7 @@ void Menu::leerEntrada() {
 			cordenadaX = cordenada["x"];
 			cordenadaY = cordenada["y"];
 			cout << "[" << cordenadaX << "," << cordenadaY << "]" << endl;
-			matrizDisp.insertar(cordenadaX, cordenadaY, 't');
+			matrizDisp.insertar(cordenadaX, cordenadaY, new Ficha('t', 0));
 			Objeto t(cordenadaX, cordenadaY, 't');
 			triples.push_back(t);
 
@@ -305,11 +329,27 @@ void Menu::menuReportes(int deDondeVengo, int quienSoy) { //0 si vengo del princ
 	}
 	else if (opcionReportes == 7)
 	{
+		string name = "";
+		do
+		{
+			cout << "Ingrese el nombre del jugador 1: " << endl;
+			cin >> name;
+			if (arbolJugadores.buscarAbb(name) == NULL)
+			{
 
+			}
+			else
+			{
+				arbolJugadores.buscarAbb(name)->getJugador()->getScoreboard().graph();
+			}
+		} while (arbolJugadores.buscarAbb(name) == NULL);
+
+		Menu::menuReportes(deDondeVengo, quienSoy);
 	}
 	else if (opcionReportes == 8)
 	{
-
+		arbolJugadores.score();
+		arbolJugadores.scoreGraph();
 	}
 	else if (opcionReportes == 9)
 	{
@@ -318,11 +358,13 @@ void Menu::menuReportes(int deDondeVengo, int quienSoy) { //0 si vengo del princ
 	}
 	else if (opcionReportes == 10)
 	{
-
+		usuario1->getJugador()->getBaraja().codigoGraph();
+		Menu::menuReportes(deDondeVengo,quienSoy);
 	}
 	else if (opcionReportes == 11)
 	{
-
+		usuario2->getJugador()->getBaraja().codigoGraph();
+		Menu::menuReportes(deDondeVengo, quienSoy);
 	}
 	else if (opcionReportes == 12)
 	{
@@ -474,6 +516,7 @@ void Menu::llenarCola() {
 void Menu::menuJuego(int turno) {
 	int opcionJuego = 0;
 	system("cls");
+	matrizDisp.graph2();
 	cout << "          *************************************   SCRABBLE   ************************************" << endl << endl;
 	if (turno == 1) 
 	{
@@ -488,12 +531,36 @@ void Menu::menuJuego(int turno) {
 	cout << "2) Reportes " << endl;
 	cout << "3) Insertar " << endl;
 	cout << "4) Intercambiar " << endl;
-	cout << "Ingrese la opción a escoger: ";
+	cout << "Ingrese la opcion a escoger: ";
 	cin >> opcionJuego;
 	
 	if (opcionJuego  == 1)
 	{
+		cout << "El jugador 1 obtuvo: " << usuario1->getJugador()->getPuntaje() << endl;
+		usuario1->getJugador()->getScoreboard().insertar(usuario1->getJugador()->getNombre(),usuario1->getJugador()->getPuntaje());
+
+		cout << "El jugador 2 obtuvo: " << usuario2->getJugador()->getPuntaje() << endl;
+		usuario2->getJugador()->getScoreboard().insertar(usuario2->getJugador()->getNombre(), usuario2->getJugador()->getPuntaje());
+
+		if (usuario1->getJugador()->getPuntaje() >  usuario2->getJugador()->getPuntaje())
+		{
+			cout << "El ganador es el jugador 1 !!!!" << endl;
+		}
+		else if (usuario1->getJugador()->getPuntaje() < usuario2->getJugador()->getPuntaje())
+		{
+			cout << "El ganador es el jugador 2 !!!!" << endl;
+		}
+		else
+		{
+			cout << "Empate :o !!!!" << endl;
+		}
+		usuario1->getJugador()->getBaraja().eliminarTodo();
+		usuario2->getJugador()->getBaraja().eliminarTodo();
+		colaFichas.vaciar();
+		Menu::mezclarVector();
+		system("pause");
 		Menu::menuPrincipal();
+		//DEBERÍA HACER EL RECUENTO DE PUNTUACIÓN
 	}
 	else if (opcionJuego == 2)
 	{
@@ -501,27 +568,87 @@ void Menu::menuJuego(int turno) {
 	}
 	else if (opcionJuego == 3)
 	{
+		Menu::game(turno);
+	}
+	
+	//El intercambio con la cola (Solo puedo 1)
+	else if (opcionJuego == 4)
+	{
+		char sustituto;
+		cout << "ingrese el caracter de su ficha: " << endl;
+		cin >> sustituto;
 
 		if (turno == 1)
 		{
-			turno == 2;
+			if (usuario1->getJugador()->getBaraja().getTamanio()!=0)
+			{
+				NodoDobleEnl* sust = usuario1->getJugador()->getBaraja().buscarNodo(sustituto);
+				if (sust != NULL)
+				{
+					cout << "Ficha encontrada " << endl;
+					colaFichas.encolar(sust->getFicha());
+					usuario1->getJugador()->getBaraja().eliminarNodo(sustituto);
+					usuario1->getJugador()->getBaraja().insertarFinal(colaFichas.descolar()->getFicha());
+				}
+				else
+				{
+					cout << "No se encontró la ficha " << endl;
+				}
+			}
+			else
+			{
+				cout << "No cuenta con fichas suficientes" << endl;
+			}
+
+			system("pause");
 		}
 		else
 		{
-			turno == 1;
+			if (usuario2->getJugador()->getBaraja().getTamanio() != 0)
+			{
+				NodoDobleEnl* sust = usuario2->getJugador()->getBaraja().buscarNodo(sustituto);
+				if (sust != NULL)
+				{
+					cout << "Ficha encontrada " << endl;
+					colaFichas.encolar(sust->getFicha());
+					usuario2->getJugador()->getBaraja().eliminarNodo(sustituto);
+					usuario2->getJugador()->getBaraja().insertarFinal(colaFichas.descolar()->getFicha());
+				}
+				else
+				{
+					cout << "No se encontró la ficha " << endl;
+				}
+			}
+			else
+			{
+				cout << "No cuenta con fichas suficientes" << endl;
+			}
+			system("pause");
+		}
+
+
+
+		if (turno == 1)
+		{
+			turno = 2;
+
+		}
+		else
+		{
+			turno = 1;
 		}
 		Menu::menuJuego(turno);
-	}
-	else if (opcionJuego == 4)
+	} 
+	//Le cedo el turno al siguiente jugador
+	else if (opcionJuego == 5)
 	{
 		if (turno == 1)
 		{
-			turno == 2;
-
+			turno = 2;
 		}
 		else
 		{
-			turno == 1;
+			turno = 1;
 		}
 		Menu::menuJuego(turno);
 	}
@@ -531,10 +658,317 @@ void Menu::menuJuego(int turno) {
 		Menu::menuJuego(turno);
 	}
 
-
-}
-
-void Menu::elmeromero(int turn) {
-
-}
 	
+
+
+}
+
+void Menu::game(int player) {
+	dimensionLimite = dimension;
+	int vecesAsignacion = 0;
+	int inicial = 0;
+	bool bandera = true;
+	int tamanio = 0;
+	char caracterr = ' ';
+	int xPo = 0;
+	int yPo = 0;
+	char horientacion = ' ';
+	string diccion = "";
+	NodoMatriz* inicio = new NodoMatriz();
+	cout << "Ingrese h si ingresara de forma horizontal o v si ingresara de forma vertical " << endl;
+	cin >> horientacion;
+	cout << "Ingrese el tamanio de su palabra" << endl;
+	cin >> tamanio;
+
+	cout << "Recuerde colocar el signo $ para indicar el fin de su turno" << endl;
+	cout << "Recuerde que el límite de su tablero es de " << dimensionLimite << endl;
+	system("pause");
+	while (bandera)
+	{
+		if (player == 1)
+		{
+			cout << "Este es tu mazo :" << endl;
+			usuario1->getJugador()->getBaraja().codigoGraph();
+		}
+		else
+		{
+			cout << "Este es tu mazo :" << endl;
+			usuario2->getJugador()->getBaraja().codigoGraph();
+		}
+		system("cls");
+		cout << "Ingrese el caracter en mayuscula" << endl;
+		cin >> caracterr;
+		if (player == 1)													//Veo si es el jugador 1
+		{
+			if (caracterr == '$')											//Indica que dejó de teclear
+			{
+				bandera = false;
+			}
+			else											                //Recolecto lo que va metiendo
+			{
+				if (usuario1->getJugador()->getBaraja().buscarCaracter(caracterr)) //Veo si el jugador 1 tiene esa moneda
+				{
+
+					do
+					{
+						cout << "Ingrese coordenada x" << endl;
+						cin >> xPo;
+					} while (xPo > dimensionLimite);
+
+					do
+					{
+						cout << "Ingrese coordenada y" << endl;
+						cin >> yPo;
+					} while (yPo > dimensionLimite);
+
+					colaFake.encolar(usuario1->getJugador()->getBaraja().buscarNodo(caracterr)->getFicha());
+					matrizFake.insertar(xPo, yPo, usuario1->getJugador()->getBaraja().buscarNodo(caracterr)->getFicha());
+					usuario1->getJugador()->getBaraja().eliminarNodo(caracterr);
+					vecesAsignacion++;
+					matrizFake.graph2();
+					if (inicial == 0)
+					{
+						inicio = matrizFake.retornarBuscador(xPo, yPo);
+						inicial++;
+					}
+
+				}
+				else
+				{
+					cout << "No cuentas con esa ficha bro" << endl;
+					system("pause");
+				}
+
+			}
+
+		}
+		else					//Entonces es el jugador 2
+		{
+			if (caracterr == '$')											//Indica que dejó de teclear
+			{
+				bandera = false;
+			}
+			else											                //Recolecto lo que va metiendo
+			{
+				if (usuario2->getJugador()->getBaraja().buscarCaracter(caracterr)) //Veo si el jugador 1 tiene esa moneda
+				{
+
+					do
+					{
+						cout << "Ingrese coordenada x" << endl;
+						cin >> xPo;
+					} while (xPo > dimensionLimite);
+
+					do
+					{
+						cout << "Ingrese coordenada y" << endl;
+						cin >> yPo;
+					} while (yPo > dimensionLimite);
+
+					colaFake.encolar(usuario2->getJugador()->getBaraja().buscarNodo(caracterr)->getFicha());
+					matrizFake.insertar(xPo, yPo, usuario2->getJugador()->getBaraja().buscarNodo(caracterr)->getFicha());
+					usuario2->getJugador()->getBaraja().eliminarNodo(caracterr);
+					vecesAsignacion++;
+					matrizFake.graph2();
+					if (inicial == 0)
+					{
+						inicio = matrizFake.retornarBuscador(xPo, yPo);
+						inicial++;
+					}
+
+				}
+				else
+				{
+					cout << "No cuentas con esa ficha bro" << endl;
+					system("pause");
+				}
+
+			}
+		}
+	}
+
+
+	// ACA TENGO LA DEL DICCIONARIO Y LA DEL PUNTAJE
+	int puntaje = 0;
+	bool dobleBoo = false;
+	bool tripleBoo = false;
+	if (horientacion == 'h')
+	{
+
+		for (int i = 0; i < tamanio; i++)
+		{
+			dobleBoo = false;
+			tripleBoo = false;
+
+			diccion += inicio->getFicha()->getCaracter();
+			//Veo si tiene el doble
+			for (const auto fc : dobles) {
+				if (inicio->getX() == fc.posX && inicio->getY() == fc.posY)
+				{
+					cout << "Puntuacion doble" << endl;
+					puntaje += inicio->getFicha()->getPuntaje() * 2;
+					dobleBoo = true;
+					break;
+				}
+			}
+			//Veo si tiene el triple
+			for (const auto fcv : triples) {
+				if (inicio->getX() == fcv.posX && inicio->getY() == fcv.posY)
+				{
+					cout << "Puntuacion triple" << endl;
+					puntaje += inicio->getFicha()->getPuntaje() * 3;
+					tripleBoo = true;
+					break;
+				}
+			}
+
+			if (dobleBoo == true || tripleBoo == true)
+			{
+
+			}
+			else
+			{
+				cout << "Puntuacion simple" << endl;
+				puntaje += inicio->getFicha()->getPuntaje();
+			}
+
+			cout << inicio->getFicha()->getCaracter() << " con puntaje inicial de " << inicio->getFicha()->getPuntaje() <<endl;
+			inicio = inicio->getDerecha();
+		}
+	}
+	else    //Es vertical
+	{
+
+		for (int i = 0; i < tamanio; i++)
+		{
+			dobleBoo = false;
+			tripleBoo = false;
+
+			diccion += inicio->getFicha()->getCaracter();
+
+			//Veo si tiene el doble
+			for (const auto fc : dobles) {
+				if (inicio->getX() == fc.posX && inicio->getY() == fc.posY)
+				{
+					cout << "Puntuacion doble" << endl;
+					puntaje += inicio->getFicha()->getPuntaje() * 2;
+					dobleBoo = true;
+					break;
+				}
+			}
+			//Veo si tiene el triple
+			for (const auto fcv : triples) {
+				if (inicio->getX() == fcv.posX && inicio->getY() == fcv.posY)
+				{
+					cout << "Puntuacion triple" << endl;
+					puntaje += inicio->getFicha()->getPuntaje() * 3;
+					tripleBoo = true;
+					break;
+				}
+			}
+			if (dobleBoo == true || tripleBoo == true)
+			{
+
+			}
+			else
+			{
+				cout << "Puntuacion normal" << endl;
+				puntaje += inicio->getFicha()->getPuntaje();
+			}
+			cout << inicio->getFicha()->getCaracter() << " con puntaje de " << inicio->getFicha()->getPuntaje() << endl;
+			inicio = inicio->getAbajo();
+		}
+	}
+
+
+	cout << diccion << endl;
+	if (listaDC.encontrarPalabra(diccion))
+	{
+		cout << "Palabra encontrada, bien hecho" << endl;
+		if (player == 1)
+		{
+			for (int i = 0; i < vecesAsignacion; i++)
+			{
+				usuario1->getJugador()->getBaraja().insertarFinal(colaFichas.descolar()->getFicha());
+			}
+			usuario1->getJugador()->setPuntaje((usuario1->getJugador()->getPuntaje())+puntaje);
+			cout << "Wow, obtuviste : " << usuario1->getJugador()->getPuntaje() << endl;
+
+			
+		}
+		else
+		{
+			for (int i = 0; i < vecesAsignacion; i++)
+			{
+				usuario2->getJugador()->getBaraja().insertarFinal(colaFichas.descolar()->getFicha());
+			}
+			usuario2->getJugador()->setPuntaje((usuario2->getJugador()->getPuntaje()) + puntaje);
+			cout << "Wow, obtuviste: " << usuario2->getJugador()->getPuntaje() << endl;
+		}
+		/*COPIO LA FAKE EN LA ORIGINAL*/
+		NodoMatriz* aux = matrizFake.getRoot()->getAbajo();
+		NodoMatriz* aux2 = matrizFake.getRoot();
+		matrizDisp.getRoot()->setAbajo(NULL); //Le pierdo todos los enlaces
+		matrizDisp.getRoot()->setDerecha(NULL);//Le pierde todos los enlaces
+
+		while (aux != NULL)
+		{
+			aux2 = aux->getDerecha();
+			while (aux2 != NULL)
+			{
+				matrizDisp.insertar(aux2->getX(), aux2->getY(), aux2->getFicha()); //Cabeceras
+				aux2 = aux2->getDerecha();
+			}
+			aux = aux->getAbajo();
+		}
+		system("pause");
+
+	}
+	else
+	{
+		cout << "La palaba no es del diccionario" << endl;
+		if (player == 1)
+		{
+			for (int i = 0; i < vecesAsignacion; i++)
+			{
+				usuario1->getJugador()->getBaraja().insertarFinal(colaFake.descolar()->getFicha());
+			}
+		}
+		else
+		{
+			for (int i = 0; i < vecesAsignacion; i++)
+			{
+				usuario2->getJugador()->getBaraja().insertarFinal(colaFake.descolar()->getFicha());
+			}
+		}
+
+		/*COPIO LA MATRIZ ORIGINAL EN LA FAKE*/
+		NodoMatriz* aux = matrizDisp.getRoot()->getAbajo();
+		NodoMatriz* aux2 = matrizDisp.getRoot();
+		matrizFake.getRoot()->setAbajo(NULL); //Le pierdo todos los enlaces
+		matrizFake.getRoot()->setDerecha(NULL);//Le pierde todos los enlaces
+
+		while (aux != NULL)
+		{
+			aux2 = aux->getDerecha();
+			while (aux2 != NULL)
+			{
+				matrizFake.insertar(aux2->getX(), aux2->getY(), aux2->getFicha()); //Cabeceras
+				aux2 = aux2->getDerecha();
+			}
+			aux = aux->getAbajo();
+		}
+		system("pause");
+	}
+
+	if (player == 1)
+	{
+		player = 2;
+
+	}
+	else
+	{
+		player = 1;
+	}
+	Menu::menuJuego(player);
+}

@@ -19,7 +19,7 @@ void ListaOrdenada::insertar(string nombre, int puntaje) {
 	else {
 		NodoOrdenado* pre = new NodoOrdenado();
 
-		while (aux != NULL && puntaje > aux->getPuntaje()) { //Hasta encontrar el mayor a puntaje insertado
+		while (aux != NULL && (puntaje < aux->getPuntaje())) { //Hasta encontrar el mayor a puntaje insertado
 			pre = aux;
 			aux = aux->getSiguiente();
 		}
@@ -63,7 +63,7 @@ void ListaOrdenada::graph() {
 	{
 		if (this->tamanio == 1)
 		{
-			acumulador2 += aux->getNombre()  + to_string(aux->getPuntaje()) + "X" + to_string(indice) + "-> NULL ;";
+			acumulador2 += aux->getNombre()  + to_string(aux->getPuntaje()) + "_" + to_string(indice) + "-> NULL ;";
 		}
 		else
 		{
@@ -73,7 +73,7 @@ void ListaOrdenada::graph() {
 			}
 			else
 			{
-				acumulador2 += aux->getNombre()  + to_string(aux->getPuntaje()) + "X" + to_string(indice) + "->" + aux->getSiguiente()->getNombre() + to_string(aux->getSiguiente()->getPuntaje()) + "X" + to_string(indice2) + ";";
+				acumulador2 += aux->getNombre()  + to_string(aux->getPuntaje()) + "_" + to_string(indice) + "->" + aux->getSiguiente()->getNombre() + to_string(aux->getSiguiente()->getPuntaje()) + "_" + to_string(indice2) + ";";
 				indice++;
 				indice2++;
 			}

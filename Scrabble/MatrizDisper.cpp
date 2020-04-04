@@ -9,10 +9,7 @@ string cadena = "";
 string ranker = "";
 
 MatrizDisper::MatrizDisper() {
-    this->root = new NodoMatriz(); //Inicio la raíz fuera de los límites
-    this->root->setX(-1);
-    this->root->setY(-1);
-    this->root->setCaracter('R');
+    this->root = new NodoMatriz(-1,-1, new Ficha('R',0)); //Inicio la raíz fuera de los límites
 	this->tamanio = 0;
 }
 
@@ -65,7 +62,8 @@ NodoMatriz* MatrizDisper::insertarOrdenadoFila(NodoMatriz* nuevo, NodoMatriz* ca
 		if (temp->getY() == nuevo->getY()) //Solo sobreescribo el temporal
 		{
 			temp->setX(nuevo->getX());
-			temp->setCaracter(nuevo->getCaracter());
+			temp->getFicha()->setCaracter(nuevo->getFicha()->getCaracter());
+			temp->getFicha()->setPuntaje(nuevo->getFicha()->getPuntaje());
 			return temp; //Retorno puntero
 		}
 		else if (temp->getY() > nuevo->getY()) //Al nuevo lo inserto antes que temp
@@ -110,7 +108,8 @@ NodoMatriz* MatrizDisper::insertarOrdenadoColumna(NodoMatriz* nuevo, NodoMatriz*
 		if (temp->getX() == nuevo->getX()) //Solo sobreescribo el temporal
 		{
 			temp->setY(nuevo->getY());
-			temp->setCaracter(nuevo->getCaracter());
+			temp->getFicha()->setCaracter(nuevo->getFicha()->getCaracter());
+			temp->getFicha()->setPuntaje(nuevo->getFicha()->getPuntaje());
 			return temp; //Retorno puntero
 		}
 		else if (temp->getX() > nuevo->getX()) //Al nuevo lo inserto antes que temp
@@ -148,25 +147,25 @@ NodoMatriz* MatrizDisper::insertarOrdenadoColumna(NodoMatriz* nuevo, NodoMatriz*
 
 NodoMatriz* MatrizDisper::crearFila(int y) {
 	NodoMatriz* cabeza_fil = this->root;
-	NodoMatriz* fila = MatrizDisper::insertarOrdenadoFila(new NodoMatriz(-1,y, 'F'), cabeza_fil);
+	NodoMatriz* fila = MatrizDisper::insertarOrdenadoFila(new NodoMatriz(-1,y, new Ficha('F',0)), cabeza_fil);
 	return fila;
 
 }
 
 NodoMatriz* MatrizDisper::crearColumna(int x) {
 	NodoMatriz* cabeza_col = this->root;
-	NodoMatriz* columna = MatrizDisper::insertarOrdenadoColumna(new NodoMatriz(x,-1,'C'), cabeza_col);
+	NodoMatriz* columna = MatrizDisper::insertarOrdenadoColumna(new NodoMatriz(x,-1, new Ficha('C', 0)), cabeza_col);
 	return columna;
 }
 
-void MatrizDisper::insertar(int x, int y, char c) {
+void MatrizDisper::insertar(int x, int y, Ficha* c) {
 	NodoMatriz* nuevo = new NodoMatriz(x,y,c); //Creo nuevo nodo
 	NodoMatriz* nodoColumna = MatrizDisper::buscarColumna(x); //Puntero para encontrar si existe o no la columna
 	NodoMatriz* nodoFila = MatrizDisper::buscarFila(y); //Puntero para encontrar si existe o no la fila
 	//1. Columna no existe y fila no existe
 	if (nodoColumna == NULL && nodoFila == NULL)
 	{
-		cout << "caso1";
+		//cout << "caso1";
 		//Crear columna
 		nodoColumna = MatrizDisper::crearColumna(x);
 		//Crear fila
@@ -180,7 +179,7 @@ void MatrizDisper::insertar(int x, int y, char c) {
 	//2. Columna no existe y fila existe
 	else if (nodoColumna == NULL && nodoFila != NULL)
 	{
-		cout << "caso2";
+		//cout << "caso2";
 		//Crear columna
 		nodoColumna = MatrizDisper::crearColumna(x);
 		//Insertar ordenado columna
@@ -192,7 +191,7 @@ void MatrizDisper::insertar(int x, int y, char c) {
 	//3. Columna existe y fila no existe
 	else if (nodoColumna != NULL && nodoFila == NULL)
 	{
-		cout << "caso3";
+		//cout << "caso3";
 		//Crear fila
 		nodoFila = MatrizDisper::crearFila(y);
 		//Insertar ordenado columna
@@ -203,7 +202,7 @@ void MatrizDisper::insertar(int x, int y, char c) {
 	//4. Columna existe y fila existe
 	else if (nodoColumna != NULL && nodoFila != NULL)
 	{
-		cout << "caso4";
+		//cout << "caso4";
 		//Insertar ordenado columna
 		nuevo = MatrizDisper::insertarOrdenadoColumna(nuevo, nodoFila);
 		//Insertar ordenado fila
@@ -249,7 +248,7 @@ void MatrizDisper::graph() {
 		}
 		else
 		{
-			cadena +="C"  + to_string(aux->getX()) + "[ label = \" " + aux->getCaracter() + "_" + to_string(aux->getX()) + "\" , width = 1.5, style = filled, fillcolor = firebrick1, group = " + to_string(aux->getX()) + " ]; ";
+			cadena +="C"  + to_string(aux->getX()) + "[ label = \" " + aux->getFicha()->getCaracter() + "_" + to_string(aux->getX()) + "\" , width = 1.5, style = filled, fillcolor = firebrick1, group = " + to_string(aux->getX()) + " ]; ";
 			ranker += "C" + to_string(aux->getX()) + " ";
 		}
 		aux = aux->getDerecha();
@@ -265,13 +264,13 @@ void MatrizDisper::graph() {
 		}
 		else
 		{
-			cadena += "F" + to_string(aux2->getY()) + "[ label = \" " + aux2->getCaracter() +"_" + to_string(aux2->getY()) + "\" , width = 1.5, style = filled, fillcolor = firebrick1, group = " + to_string(aux2->getX()) + " ]; ";
+			cadena += "F" + to_string(aux2->getY()) + "[ label = \" " + aux2->getFicha()->getCaracter() +"_" + to_string(aux2->getY()) + "\" , width = 1.5, style = filled, fillcolor = firebrick1, group = " + to_string(aux2->getX()) + " ]; ";
 			if (aux2->getDerecha() != NULL)
 			{
 				aux3 = aux2->getDerecha();
 				while (aux3 != NULL)
 				{
-					cadena += "M" + to_string(aux3->getX()) + to_string(aux3->getY()) + "[ label = \" " + aux3->getCaracter() + "\" , width = 1.5, style = filled, fillcolor = lightskyblue, group = " + to_string(aux3->getX()) + " ]; ";
+					cadena += "M" + to_string(aux3->getX()) + to_string(aux3->getY()) + "[ label = \" " + aux3->getFicha()->getCaracter() + "\" , width = 1.5, style = filled, fillcolor = lightskyblue, group = " + to_string(aux3->getX()) + " ]; ";
 					aux3 = aux3->getDerecha();
 				}
 			}
@@ -443,13 +442,12 @@ void MatrizDisper::graph2() {
 
 		if (aux->getX() == -1)
 		{
-
 			cadena += "Raiz[ label = \" root \" , width = 1, style = filled, fillcolor = firebrick1, group = " + to_string(aux->getX()) + " ]; ";
 			ranker += "Raiz ";
 		}
 		else
 		{
-			cadena += "C" + to_string(aux->getX()) + "[ label = \" " + aux->getCaracter() + "_" + to_string(aux->getX()) + "\" , width = 1, style = filled, fillcolor = firebrick1, group = " + to_string(aux->getX()) + " ]; ";
+			cadena += "C" + to_string(aux->getX()) + "[ label = \" " + aux->getFicha()->getCaracter() + "_" + to_string(aux->getX()) + "\" , width = 1, style = filled, fillcolor = firebrick1, group = " + to_string(aux->getX()) + " ]; ";
 			ranker += "C" + to_string(aux->getX()) + " ";
 		}
 		aux = aux->getDerecha();
@@ -458,6 +456,7 @@ void MatrizDisper::graph2() {
 
 	while (aux2 != NULL) //Creo las cabeceras de Filas y todos los nodos 
 	{
+
 		if (aux2->getY() == -1)
 		{
 
@@ -465,13 +464,13 @@ void MatrizDisper::graph2() {
 		}
 		else
 		{
-			cadena += "F" + to_string(aux2->getY()) + "[ label = \" " + aux2->getCaracter() + "_" + to_string(aux2->getY()) + "\" , width = 1, style = filled, fillcolor = firebrick1, group = " + to_string(aux2->getX()) + " ]; ";
+			cadena += "F" + to_string(aux2->getY()) + "[ label = \" " + aux2->getFicha()->getCaracter() + "_" + to_string(aux2->getY()) + "\" , width = 1, style = filled, fillcolor = firebrick1, group = " + to_string(aux2->getX()) + " ]; ";
 			if (aux2->getDerecha() != NULL)
 			{
 				aux3 = aux2->getDerecha();
 				while (aux3 != NULL)
 				{
-					cadena += "M" + to_string(aux3->getX()) + "_"+ to_string(aux3->getY()) + "[ label = \" " + aux3->getCaracter() + "\" , width = 1, style = filled, fillcolor = lightskyblue, group = " + to_string(aux3->getX()) + " ]; ";
+					cadena += "M" + to_string(aux3->getX()) + "_"+ to_string(aux3->getY()) + "[ label = \" " + aux3->getFicha()->getCaracter() + "\" , width = 1, style = filled, fillcolor = lightskyblue, group = " + to_string(aux3->getX()) + " ]; ";
 					aux3 = aux3->getDerecha();
 				}
 			}
@@ -481,6 +480,7 @@ void MatrizDisper::graph2() {
 
 	while (aux4 != NULL)
 	{
+
 		if (aux4->getX() == -1 && aux4->getY() == -1) //Enlazo Raiz con los nodos de columnas
 		{
 			cadena += "Raiz -> C" + to_string(aux4->getDerecha()->getX()) + "[dir=both];";
@@ -499,6 +499,7 @@ void MatrizDisper::graph2() {
 
 	while (aux5 != NULL)
 	{
+
 		if (aux5->getX() == -1 && aux5->getY() == -1) //Enlazo Raiz con los nodos de filas
 		{
 			cadena += "Raiz -> F" + to_string(aux5->getAbajo()->getY()) + "[dir=both];";
@@ -519,6 +520,7 @@ void MatrizDisper::graph2() {
 
 	while (aux6 != NULL) //Creo las cabeceras de Filas y todos los nodos 
 	{
+
 		if (aux6->getY() == -1)
 		{
 
@@ -602,3 +604,33 @@ void MatrizDisper::graph2() {
 
 	cadena = "";
 }
+
+NodoMatriz* MatrizDisper::retornarBuscador(int x, int y) {
+	bool bandera = false;
+	NodoMatriz* temp = this->root;
+	NodoMatriz* aux2 = new NodoMatriz();
+	while (temp != NULL)
+	{
+		if (temp->getX() == x) //Ya encontré la x
+		{
+			aux2 = temp;
+			while (aux2 != NULL)
+			{
+				if (aux2->getY() == y)
+				{
+					return aux2;
+				}
+				else
+				{
+					aux2 = aux2->getAbajo();
+				}
+			}
+		}
+		else
+		{
+			temp = temp->getDerecha();
+		}
+	}
+	return NULL;
+}
+

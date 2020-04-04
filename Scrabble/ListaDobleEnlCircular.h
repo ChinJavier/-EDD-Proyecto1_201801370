@@ -30,5 +30,8 @@ public:
 	Nodo_D_E_C* getUltimo();				 //Obtengo el segundo nodo
 	int getTamanio();						 //Devuelve el tamaño de mi lista
 
+
+	string convertirMinuscula(string);
+
 };
 

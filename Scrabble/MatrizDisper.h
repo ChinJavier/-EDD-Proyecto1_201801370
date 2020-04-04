@@ -29,10 +29,16 @@ public:
 	NodoMatriz* insertarOrdenadoFila(NodoMatriz*,NodoMatriz*);
 	NodoMatriz* insertarOrdenadoColumna(NodoMatriz*,NodoMatriz*);
 
-	void insertar(int, int, char);
+	NodoMatriz* retornarBuscador(int, int);
+
+	void insertar(int, int, Ficha*);
 
 	void graph();
 	void graph2();
+
+
+
+
 
 
 

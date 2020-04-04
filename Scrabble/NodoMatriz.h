@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include "Ficha.h"
 using namespace std;
 class NodoMatriz
 {
@@ -9,14 +10,14 @@ private:
     NodoMatriz* derecha;
     NodoMatriz* arriba;
     NodoMatriz* abajo;
-    char caracter;
+    Ficha* ficha;
     int xPos;
     int yPos;
 
 public:
 
     NodoMatriz();
-    NodoMatriz(int, int, char);
+    NodoMatriz(int, int, Ficha*);
 
     void setIzquierda(NodoMatriz*);
     void setDerecha(NodoMatriz*);
@@ -24,11 +25,11 @@ public:
     void setAbajo(NodoMatriz*);
     void setX(int);
     void setY(int);
-    void setCaracter(char);
+    void setFicha(Ficha*);
 
     int getX();
     int getY();
-    char getCaracter();
+    Ficha* getFicha();
 
     NodoMatriz* getIzquierda();
     NodoMatriz* getDerecha();

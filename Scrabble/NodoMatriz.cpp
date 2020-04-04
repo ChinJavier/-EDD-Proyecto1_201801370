@@ -8,17 +8,17 @@ NodoMatriz::NodoMatriz() {
 	this->derecha = NULL;
 	this->arriba = NULL;
 	this->abajo = NULL;
-	this->caracter = ' ';
+	this->ficha = NULL;
 	this->xPos = 0;
 	this->yPos = 0;
 }
 
-NodoMatriz::NodoMatriz(int x, int y, char c) {
+NodoMatriz::NodoMatriz(int x, int y, Ficha* c) {
 	this->izquierda = NULL;
 	this->derecha = NULL;
 	this->arriba = NULL;
 	this->abajo = NULL;
-	this->caracter = c;
+	this->ficha = c;
 	this->xPos = x;
 	this->yPos = y;
 }
@@ -47,8 +47,8 @@ void NodoMatriz::setY(int y) {
 	this->yPos = y;
 }
 
-void NodoMatriz::setCaracter(char c) {
-	this->caracter = c;
+void NodoMatriz::setFicha(Ficha* c) {
+	this->ficha = c;
 }
 
 int NodoMatriz::getX() {
@@ -59,8 +59,8 @@ int NodoMatriz::getY() {
 	return this->yPos;
 }
 
-char NodoMatriz::getCaracter() {
-	return this->caracter;
+Ficha* NodoMatriz::getFicha() {
+	return this->ficha;
 }
 
 NodoMatriz* NodoMatriz::getIzquierda() {
