@@ -343,7 +343,6 @@ void Menu::menuReportes(int deDondeVengo, int quienSoy) { //0 si vengo del princ
 				arbolJugadores.buscarAbb(name)->getJugador()->getScoreboard().graph();
 			}
 		} while (arbolJugadores.buscarAbb(name) == NULL);
-
 		Menu::menuReportes(deDondeVengo, quienSoy);
 	}
 	else if (opcionReportes == 8)

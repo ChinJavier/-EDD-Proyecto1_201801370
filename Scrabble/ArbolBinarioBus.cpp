@@ -308,4 +308,5 @@ void ArbolBinarioBus::score_rec(NodoArbol* raiz) {
 void ArbolBinarioBus::scoreGraph() {
     scoreMero.graph();
     system("pause");
+    scoreMero.vaciar();
 }
