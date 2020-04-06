@@ -350,6 +350,7 @@ void Menu::menuReportes(int deDondeVengo, int quienSoy) { //0 si vengo del princ
 	{
 		arbolJugadores.score();
 		arbolJugadores.scoreGraph();
+		Menu::menuReportes(deDondeVengo, quienSoy);
 	}
 	else if (opcionReportes == 9)
 	{
@@ -555,8 +556,12 @@ void Menu::menuJuego(int turno) {
 			cout << "Empate :o !!!!" << endl;
 		}
 		usuario1->getJugador()->getBaraja().eliminarTodo();
+		usuario1->getJugador()->setPuntaje(0);
 		usuario2->getJugador()->getBaraja().eliminarTodo();
+		usuario2->getJugador()->setPuntaje(0);
 		colaFichas.vaciar();
+		matrizDisp.getRoot()->setAbajo(NULL);
+		matrizDisp.getRoot()->setDerecha(NULL);
 		Menu::mezclarVector();
 		system("pause");
 		Menu::menuPrincipal();

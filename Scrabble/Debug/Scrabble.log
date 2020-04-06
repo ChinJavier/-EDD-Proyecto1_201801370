@@ -1,10 +1,4 @@
-﻿  ArbolBinarioBus.cpp
-  ListaOrdenada.cpp
-  MatrizDisper.cpp
-  Menu.cpp
+﻿  Menu.cpp
 C:\Users\Javier C\Desktop\Semestres\QUINTO SEMESTRE\EDD\PRO1\-EDD-Proyecto1_201801370\Scrabble\Menu.cpp(6,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-C:\Users\Javier C\Desktop\Semestres\QUINTO SEMESTRE\EDD\PRO1\-EDD-Proyecto1_201801370\Scrabble\Menu.cpp(499,12): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
-  Scrabble.cpp
-C:\Users\Javier C\Desktop\Semestres\QUINTO SEMESTRE\EDD\PRO1\-EDD-Proyecto1_201801370\Scrabble\Scrabble.cpp(14,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-  Generando código...
+C:\Users\Javier C\Desktop\Semestres\QUINTO SEMESTRE\EDD\PRO1\-EDD-Proyecto1_201801370\Scrabble\Menu.cpp(492,12): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
   Scrabble.vcxproj -> C:\Users\Javier C\Desktop\Semestres\QUINTO SEMESTRE\EDD\PRO1\-EDD-Proyecto1_201801370\Scrabble\Debug\Scrabble.exe
